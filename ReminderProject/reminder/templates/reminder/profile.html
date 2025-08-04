@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Личный профиль</title>
+        <link rel="stylesheet" href="{% static 'css/profile_page.css' %}">
+    </head>
+    <body>
+        <div>
+            <p>{{ user.first_name }}</p>
+            <p>{{ user.last_name  }}</p>
+            <p>{{ user.email }}</p>
+            {% if user.telegram_id %}
+                <p>{{ form.username.errors.0 }}</p>
+            {% else %}
+                <a>Подтвердите свой telegram</a>        <!--TODO: привязка телеграма к аккаунту -->
+            {% endif %}
+        </div>
+        <a href="./create_reminder">Создать напоминание</a>
+    </body>
+</html>
+

@@ -3,6 +3,8 @@ from django.db import models
 from django.contrib.gis.db.models import PointField
 
 class CustomUser(AbstractUser):
+    first_name = models.CharField(blank=True, max_length=255)
+    last_name = models.CharField(blank=True, max_length=255)
     email = models.EmailField(unique=True)
     is_first_login = models.BooleanField(default=False)
     telegram_id = models.IntegerField(default=None, null=True)
