@@ -9,10 +9,14 @@
         <h1>Добро пожаловать в Напоминалки</h1>
         <h3>Чтобы создать или посмотреть свои напоминалки войдите в свой аккаунт</h3>
         <ul>
-            <li><a href="./sign_in">Войти</a></li>
-            <li><a href="./register">Регистрация</a></li>
+            {% if is_authenticated %}
+                <li><a href="./profile">Профиль</a></li>
+                <li><a href="./out">Выйти</a></li>
+            {% else %}
+                <li><a href="./sign_in">Войти</a></li>
+                <li><a href="./register">Регистрация</a></li>
+            {% endif %}
         </ul>
-        <a href="./profile">Профиль</a>
     </body>
 </html>
 

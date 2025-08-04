@@ -1,12 +1,10 @@
 from django import forms
-from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from django.core.validators import MinLengthValidator
 
 from .models import CustomUser, Reminder
 
 
-class UserForm(forms.ModelForm):
+class UserRegisterForm(forms.ModelForm):
     username = forms.CharField(label="Username")
     password = forms.CharField(label="Password", widget=forms.PasswordInput())
     first_name = forms.CharField(max_length=100, label="First name", required=True)
@@ -19,7 +17,7 @@ class UserForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if CustomUser.objects.filter(email=email).exists():
-            raise ValidationError("Email already registered")
+            raise ValidationError("Email уже зарегистрирован")
         return email
 
     def clean_username(self):
@@ -42,6 +40,23 @@ class UserForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+class UserLoginForm(forms.Form):
+    username = forms.CharField(label="Username")
+    password = forms.CharField(label="Password", widget=forms.PasswordInput())
+
+    def clean(self):
+        cleaned_data = super().clean()
+        username = cleaned_data.get('username')
+        password = cleaned_data.get('password')
+        error = forms.ValidationError("Неправильный пароль или имя пользователя")
+        try:
+            user = CustomUser.objects.get(username=username)
+            if not user or not user.check_password(password):
+                raise error
+        except CustomUser.DoesNotExist:
+            raise error
+        return cleaned_data
 
 class ReminderForm(forms.ModelForm):
     class Meta:
